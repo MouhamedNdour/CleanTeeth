@@ -1,4 +1,5 @@
 ﻿using CleanTeeth.Domain.Exceptions;
+using CleanTeeth.Domain.ValueObject;
 
 namespace CleanTeeth.Domain.Entities
 {
@@ -6,23 +7,18 @@ namespace CleanTeeth.Domain.Entities
     {
         public Guid Id { get; private set; }
         public string Name { get; private set; }  = null!;
-        public string Email { get; private set; } = null!;
+        public Email Email { get; private set; } = null!;
 
-        public Patient(string name, string email)
+        public Patient(string name, Email email)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
-                throw new BusinessRuleException($"The {nameof(Name)} cannot be null or empty.");
+                throw new BusinessRuleException($"The {nameof(name)} cannot be null or empty.");
             }
 
-            if (string.IsNullOrWhiteSpace(email))
+            if(email is null)
             {
-                throw new BusinessRuleException($"The {nameof(email)} cannot be null or empty.");
-            }
-
-            if (!email.Contains('@'))
-            {
-                throw new BusinessRuleException($"The {nameof(email)} must be a valid email address.");
+                throw new BusinessRuleException($"The {nameof(email)} cannot be null.");
             }
 
             Id = Guid.NewGuid();
